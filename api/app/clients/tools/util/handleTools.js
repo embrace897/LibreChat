@@ -95,6 +95,10 @@ const resolveAgentBuilderTool = createAgentBuilderToolResolver({
   getRoleByName,
   checkCapability,
   createAgent: (req, input) => agentsController.createAgentForRequest(req, input),
+  updateAgent: (req, authorized, input) =>
+    agentsController.updateAgentForRequest(req, authorized, input),
+  getToolFilterDeps: (req) =>
+    agentsController.getAgentToolFilterDeps(req, createMCPPermissionContext(req)),
 });
 
 /** @typedef {typeof import('@librechat/agents/langchain/tools').Tool} ToolConstructor */
@@ -344,6 +348,7 @@ const loadTools = async ({
     const agentBuilderTool = resolveAgentBuilderTool({
       tool,
       req: options.req,
+      agentId: agent?.id,
       toolRegistry: options.toolRegistry,
     });
     if (agentBuilderTool) {

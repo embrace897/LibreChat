@@ -95,6 +95,7 @@ jest.mock('~/cache', () => ({
 
 const {
   createAgent: createAgentHandler,
+  createAgentForRequest,
   getAgent: getAgentHandler,
   getAgentExpanded,
   getAgentVersions: getAgentVersionsHandler,
@@ -699,7 +700,7 @@ describe('Agent Controllers - Mass Assignment Protection', () => {
       });
       const create = createAgentManagementCreateHandler({
         getRoleByName,
-        createAgent: createAgentHandler,
+        createAgent: createAgentForRequest,
       });
       const checkAgentPermission = async ({
         userId: accessibleUserId,
@@ -952,7 +953,7 @@ describe('Agent Controllers - Mass Assignment Protection', () => {
             },
           },
         }),
-        createAgent: createAgentHandler,
+        createAgent: createAgentForRequest,
       });
       mockReq.user.tenantId = 'tenant-a';
       mockReq.body = {

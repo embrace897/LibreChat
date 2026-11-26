@@ -92,6 +92,18 @@ export type TModelSpec = {
    * the `deferred_tools` agent capability.
    */
   deferLoading?: boolean | string[];
+  /**
+   * Let code that `run_tools_with_bash` runs call the selected tools, which
+   * stay directly callable too. Calls made from code skip `toolApproval`
+   * entirely, including tools an admin listed under `ask`: no approval card
+   * is shown for them, only for the outer `run_tools_with_bash` call.
+   * `true` selects every tool that allows it, a string array only the named
+   * tools, matched against the spec's resolved tool ids or a capability.
+   * Today MCP tools allow it; the host's own tools and any tool declared
+   * direct-only never do. `false` is the same as omitting it. Requires the
+   * `programmatic_tools` and `execute_code` agent capabilities.
+   */
+  programmaticTools?: boolean | string[];
   artifacts?: string | boolean;
   mcpServers?: string[];
   skills?: boolean | string[];
@@ -227,6 +239,7 @@ export const tModelSpecSchema = z.object({
   runInBackground: z.union([z.boolean(), z.array(z.string())]).optional(),
   describeIntent: z.union([z.boolean(), z.array(z.string())]).optional(),
   deferLoading: z.union([z.boolean(), z.array(z.string())]).optional(),
+  programmaticTools: z.union([z.boolean(), z.array(z.string())]).optional(),
   artifacts: z.union([z.string(), z.boolean()]).optional(),
   mcpServers: z.array(z.string()).optional(),
   skills: z.union([z.boolean(), z.array(z.string())]).optional(),
